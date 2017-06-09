@@ -106,7 +106,7 @@ public class Persons {
     
     private String getXMLPerson(int id){
         Person p=new Person(id);
-        String rez="Person not found";
+        String rez=null;
         int pos;
         if((pos=agenda.indexOf(p))>=0){
             p=agenda.get(pos);
@@ -126,10 +126,13 @@ public class Persons {
     }
     
     private String getJSONPerson(int id){
-        String rez="N/A";
+        String rez=null;
         try {
-            JSONObject json=XML.toJSONObject(getXMLPerson(id));
-            rez=json.toString(3);
+            String xml=getXMLPerson(id);
+            if(xml!=null){
+                JSONObject json=XML.toJSONObject(xml);
+                rez=json.toString(3);
+            }
         } catch (JSONException ex) {
             Logger.getLogger(Persons.class.getName()).log(Level.SEVERE, null, ex);
         }
