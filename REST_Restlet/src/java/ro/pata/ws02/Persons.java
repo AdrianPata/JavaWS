@@ -50,9 +50,10 @@ public class Persons {
     }
     
     public Persons(ServletContext ctx){
-        this.idIdx.set(0);
-        this.agenda = new CopyOnWriteArrayList<>();
+        this.idIdx = new AtomicInteger(0);
+        this.agenda = new CopyOnWriteArrayList<>();        
         this.sctx=ctx;        
+        loadAgenda();
     }
 
     public void setAccept(String c){

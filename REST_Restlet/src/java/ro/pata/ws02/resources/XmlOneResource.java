@@ -13,19 +13,17 @@ import org.restlet.resource.ServerResource;
 
 /**
  *
- * @author adi
+ * @author A4YZTZZ
  */
-public class XmlAllResource extends ServerResource {
-    public XmlAllResource(){
-        
-    }
+public class XmlOneResource extends ServerResource {
     
     @Get
-    public Representation toXml(){
-        String xml=Agenda.getAgenda("xml").getAgenda();
+    public Representation getXml(){
+        String id=(String)getRequest().getAttributes().get("id");
+        String xml=Agenda.getAgenda("xml").getPerson(Integer.parseInt(id));
         
-        StringRepresentation ret=new StringRepresentation(xml,MediaType.TEXT_XML);
+        StringRepresentation rez=new StringRepresentation(xml,MediaType.TEXT_XML);
         
-        return ret;
+        return rez;
     }
 }
