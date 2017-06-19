@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoints version="2.0" xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime">
+  <endpoint implementation="ro.pata.ws02.PersonsProvider" 
+	    name="PersonsProvider" 
+	    url-pattern="/ws"/>
+  
+  <endpoint implementation="ro.pata.ws02.DoiProvider" 
+	    name="DoiProvider" 
+	    url-pattern="/doi"/>  
+</endpoints>
