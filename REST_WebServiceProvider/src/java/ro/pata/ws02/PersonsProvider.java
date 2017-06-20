@@ -5,10 +5,16 @@
  */
 package ro.pata.ws02;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.ws.BindingType;
 import javax.xml.ws.Provider;
@@ -18,6 +24,11 @@ import javax.xml.ws.WebServiceProvider;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.http.HTTPBinding;
 import javax.xml.ws.http.HTTPException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import org.xml.sax.InputSource;
 
 /**
  *
@@ -48,8 +59,14 @@ public class PersonsProvider implements Provider<Source>{
             agenda.setAccept("xml");
         }
         
-        if(httpVerb.equals("GET")) return doGet(mctx);
-        else throw new HTTPException(405); //bad verb
+        switch (httpVerb) {
+            case "GET":
+                return doGet(mctx);
+            case "POST":
+                return doPost(request);
+            default:
+                throw new HTTPException(405); //bad verb
+        }
     }
     
     private Source doGet(MessageContext mctx){
@@ -63,8 +80,38 @@ public class PersonsProvider implements Provider<Source>{
         }       
     }
     
+    private Source doPost(Source request){
+        InputSource in=toInputSource(request);
+        String name=findElement("//name/text()",in);
+        if(name==null) throw new HTTPException(400);
+        return toSource("<msg>Name: "+name+"</msg>");
+    }
+    
     private StreamSource toSource(String str){
         return new StreamSource(new StringReader(str));
+    }
+    
+    private InputSource toInputSource(Source source) {
+        InputSource input = null;
+        try {
+            Transformer trans = TransformerFactory.newInstance().newTransformer();
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            StreamResult result = new StreamResult(bos);
+            trans.transform(source, result);
+            input = new InputSource(new ByteArrayInputStream(bos.toByteArray()));
+        }
+        catch(TransformerException e) { throw new HTTPException(500); } // internal server error
+        return input;
+    }    
+    
+    private String findElement(String expression, InputSource source) {
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        String retval = null;
+        try {
+            retval = (String) xpath.evaluate(expression, source, XPathConstants.STRING);
+        }
+        catch(XPathExpressionException e) { throw new HTTPException(400); } // bad request
+        return retval;
     }
     
     private int getId(String qs){
