@@ -1,0 +1,12 @@
+<persoane>
+	<persoana>
+		<nume>Adi</nume>
+		<varsta>35</varsta>
+		<oras>Campulung</oras>
+	</persoana>
+	<persoana>
+		<nume>Irinuca</nume>
+		<varsta>30</varsta>
+		<oras>Berlin</oras>
+	</persoana>
+</persoane>
