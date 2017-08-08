@@ -2,6 +2,8 @@
 /REST_HttpServlet/dist/
 /REST_HttpServlet/build/
 /REST_JAX-RS/nbproject/private/
+/REST_JAX-RS/build/
+/REST_JAX-RS/dist/
 /REST_Restlet/nbproject/private/
 /REST_Restlet/build/
 /REST_WebServiceProvider/nbproject/private/
@@ -11,3 +13,6 @@
 /REST_ClientAmazon/build/
 /XML_Bind/nbproject/private/
 /XML_Bind/build/
+/REST_JAX-RS_Client/nbproject/private/
+/REST_JAX-RS_Client/build/
+/REST_JAX-RS_Client/dist/
